@@ -35,20 +35,17 @@ namespace OnnxSR
             // Read image
             using Image<Rgb24> image = SixLabors.ImageSharp.Image.Load<Rgb24>(imageFilePath);
             using Image<Rgb24> imageBic = image.Clone();
+            // Resize image
 
-            image.Save("./demooGray.png");
             imageBic.Mutate(x => x.Resize(new SixLabors.ImageSharp.Size(image.Width * 3, image.Height * 3)));
 
 
-            // Resize image
 
             // Preprocess image
             Tensor<float> input = new DenseTensor<float>(new[] { 1, 1, image.Height, image.Width });
             Tensor<float> inputBic = new DenseTensor<float>(new[] { 1, 3, imageBic.Height, imageBic.Width });
 
-            var mean = new[] { 0.485f, 0.456f, 0.406f };
             var conv = new SixLabors.ImageSharp.ColorSpaces.Conversion.ColorSpaceConverter();
-            var stddev = new[] { 0.229f, 0.224f, 0.225f };
             for (int y = 0; y < image.Height; y++)
             {
                 Span<Rgb24> pixelSpan = image.GetPixelRowSpan(y);
@@ -72,13 +69,6 @@ namespace OnnxSR
                     inputBic[0, 2, y, x] = xx.Cr;
                 }
             }
-
-
-
-
-
-
-
             var inputs = new List<NamedOnnxValue>
             {
                 NamedOnnxValue.CreateFromTensor("input", input)
@@ -101,13 +91,11 @@ namespace OnnxSR
 
                     var tt = new SixLabors.ImageSharp.ColorSpaces.Conversion.ColorSpaceConverter().ToRgb(ycbcr);
 
-
-
                     neww[x, y] = tt;
                 }
             }
-            neww.SaveAsJpeg(Path.Combine(ressourcePath,"FINAL.jpeg"));
-            imageBic.SaveAsJpeg(Path.Combine(ressourcePath, "Bicc.jpeg"));
+            neww.SaveAsJpeg(Path.Combine(ressourcePath,"SuperResolved.jpeg"));
+            imageBic.SaveAsJpeg(Path.Combine(ressourcePath, "Bicubic.jpeg"));
 
             Console.WriteLine("Super Resolution using ONNX!");
         }
