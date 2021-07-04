@@ -48,7 +48,6 @@ namespace OnnxSR
             var conv = new SixLabors.ImageSharp.ColorSpaces.Conversion.ColorSpaceConverter();
             for (int y = 0; y < image.Height; y++)
             {
-                Span<Rgb24> pixelSpan = image.GetPixelRowSpan(y);
                 for (int x = 0; x < image.Width; x++)
                 {
                     var xxxx = new SixLabors.ImageSharp.ColorSpaces.Conversion.ColorSpaceConverter().Adapt(image[x, y]);
@@ -60,7 +59,6 @@ namespace OnnxSR
 
             for (int y = 0; y < imageBic.Height; y++)
             {
-                Span<Rgb24> pixelSpan = imageBic.GetPixelRowSpan(y);
                 for (int x = 0; x < imageBic.Width; x++)
                 {
                     var xx = conv.ToYCbCr(new SixLabors.ImageSharp.ColorSpaces.Rgb(pixelSpan[x].R, pixelSpan[x].G, pixelSpan[x].B));
