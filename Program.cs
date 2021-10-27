@@ -61,7 +61,7 @@ namespace OnnxSR
             {
                 for (int x = 0; x < imageBic.Width; x++)
                 {
-                    var xx = conv.ToYCbCr(new SixLabors.ImageSharp.ColorSpaces.Rgb(pixelSpan[x].R, pixelSpan[x].G, pixelSpan[x].B));
+                    var xx = conv.ToYCbCr(new SixLabors.ImageSharp.ColorSpaces.Rgb(imageBic[x,y].R, imageBic[x, y].G, imageBic[x, y].B));
                     inputBic[0, 0, y, x] = xx.Y;
                     inputBic[0, 1, y, x] = xx.Cb;
                     inputBic[0, 2, y, x] = xx.Cr;
